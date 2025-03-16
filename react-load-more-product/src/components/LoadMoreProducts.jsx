@@ -1,46 +1,40 @@
 import React, { useEffect, useState } from "react";
-import Pagination from "./Pagination.jsx";
 
-import "./ProductList.css";
+import "./LoadMoreProducts.css";
 
-const ProductList = ({ url, productPerPage }) => {
+const LoadMoreProducts = ({ url, productPerPage }) => {
   const [products, setProducts] = useState([]);
-  const [totalProduct, setTotalProduct] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [productCount, setProductCount] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchProduct();
-  }, [page]);
-
-  const fetchProduct = async () => {
+  const fetchProducts = async () => {
     setLoading(true);
     try {
       const response = await fetch(
         `${url}?skip=${productPerPage * (page - 1)}&&limit=${productPerPage}`
       );
       const data = await response.json();
+
       console.log(data);
 
       if (data && data.products && data.products.length > 0) {
-        setProducts(data.products);
-        setTotalProduct(data.total);
-        setLoading(false);
+        setProducts((prev) => [...prev, ...data.products]);
+        setProductCount(data.total);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (loading) {
-    return <div className="loading">Loading products...</div>;
-  }
-
-  // console.log(page);
+  useEffect(() => {
+    fetchProducts();
+  }, [page]);
 
   return (
-    <div className="pagination-app">
-      <h1>React Pagination App</h1>
+    <div className="container">
+      <h1>React Load More Products</h1>
       <div className="product-list">
         {products && products.length > 0
           ? products.map((product, index) => (
@@ -51,14 +45,15 @@ const ProductList = ({ url, productPerPage }) => {
             ))
           : null}
       </div>
-      <Pagination
-        productCount={totalProduct}
-        page={page}
-        setPage={setPage}
-        productPerPage={productPerPage}
-      />
+      <button
+        className="load-more-button"
+        disabled={page === Math.ceil(productCount / productPerPage)}
+        onClick={() => setPage(page + 1)}
+      >
+        {loading ? "Loading...." : "Load More Products"}
+      </button>
     </div>
   );
 };
 
-export default ProductList;
+export default LoadMoreProducts;
