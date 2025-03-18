@@ -33,6 +33,7 @@ const Accordian = ({ data }) => {
 
   return (
     <div className="wrapper">
+      <h1>React Single/Multi Select Accordian</h1>
       <div>
         <input
           type="radio"
@@ -54,9 +55,9 @@ const Accordian = ({ data }) => {
         <label htmlFor="multi">Multi Select</label>
       </div>
       {data.map((item) => (
-        <div key={item.id} className="accordian-item">
-          <div className="question" onClick={() => handleSelect(item.id)}>
-            {item.question}
+        <div key={item.id} className="accordian">
+          <div className="item" onClick={() => handleSelect(item.id)}>
+            <h3>{item.question}</h3>
             <span>
               {selectedId === item.id || multiSelectedId.includes(item.id)
                 ? "-"
