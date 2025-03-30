@@ -55,7 +55,8 @@ const ScrollIndicator = ({ url }) => {
         <div className="scroll-indicator-container">
           <div
             className="scroll-progress"
-            style={{ width: `${scrollPercentage}%` }}
+            style={{ transform: `translateX(${scrollPercentage - 100}%)` }}
+            // style={{ width: `${scrollPercentage}%` }} // not recomendate
           ></div>
         </div>
       </div>
