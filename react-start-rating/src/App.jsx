@@ -1,7 +1,8 @@
 import "./App.css";
+import Rating from "./components/Rating.jsx";
 
 function App() {
-  return <div>Starter App</div>;
+  return <Rating numberOfStars={5} />;
 }
 
 export default App;
