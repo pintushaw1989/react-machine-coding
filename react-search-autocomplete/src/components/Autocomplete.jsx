@@ -6,32 +6,29 @@ const Autocomplete = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [message, setMessage] = useState("");
 
   const fetchData = async (searchTerm) => {
-    if (searchTerm?.length) {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `https://dummyjson.com/users/search?q=${searchTerm}`
-        );
-        const data = await response.json();
-
-        if (data && data.users && data.users.length > 0) {
-          setFilteredUsers(data.users);
-          setShowResults(true);
-          setMessage("");
-        } else {
-          setFilteredUsers([]);
-          setMessage("No user exist!");
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
+    if (searchTerm.trim() === "") {
       setFilteredUsers([]);
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `https://dummyjson.com/users/search?q=${searchTerm}`
+      );
+      const data = await response.json();
+
+      if (data && data.users && data.users.length > 0) {
+        setFilteredUsers(data.users);
+      } else {
+        setFilteredUsers([]);
+      }
+    } catch (error) {
+      console.log(error);
+      setFilteredUsers([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -45,28 +42,38 @@ const Autocomplete = () => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+  const handleResultClick = (user) => {
+    setSearchTerm(`${user.firstName} ${user.lastName}`);
+    setShowResults(false);
   };
 
   return (
-    <div>
+    <div className="container">
       <input
         type="text"
+        className="search-input"
         value={searchTerm}
         placeholder="Search users..."
-        onChange={handleSearch}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          setShowResults(true);
+        }}
       />
-
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : showResults ? (
-        <Suggestions users={filteredUsers} />
-      ) : null}
-
-      {message?.length > 0 && searchTerm?.length > 0 ? (
-        <div>{message}</div>
-      ) : null}
+  
+      {showResults && (searchTerm.trim() !== "" || isLoading) && (
+        <div className="suggestions">
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : filteredUsers.length > 0 ? (
+            <Suggestions
+              users={filteredUsers}
+              handleResultClick={handleResultClick}
+            />
+          ) : (
+            <div>No user found!</div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

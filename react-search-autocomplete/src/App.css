@@ -1,0 +1,81 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 10px;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 24px;
+  transition: all 0.2s;
+}
+
+.suggestions {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 16px;
+  max-height: 360px;
+  overflow-y: auto;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: start;
+}
+
+.suggestions-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  overflow-x: hidden;
+}
+
+.suggestion-item {
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.suggestion-item:hover {
+  background-color: #f3f4f6;
+}
+
+.suggestion-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.suggestion-info {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.suggestion-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.suggestion-email {
+  font-size: 12px;
+  color: #6b7280;
+}
